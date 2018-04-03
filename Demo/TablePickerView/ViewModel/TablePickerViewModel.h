@@ -36,4 +36,6 @@
 
 @property (nonatomic, strong) UIColor *narmolColor;
 
+- (void) removeModel;
+
 @end

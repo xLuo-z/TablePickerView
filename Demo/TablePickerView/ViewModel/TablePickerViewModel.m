@@ -28,6 +28,10 @@
     return _modelArr;
 }
 
+- (void)removeModel {
+    [self.modelArr removeAllObjects];
+}
+
 #pragma mark table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(optionView:numberOfRowsInComponent:)]) {

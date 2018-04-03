@@ -86,6 +86,8 @@
 
 - (void)reloadComponent:(NSInteger)component {
     UITableView *tableView = self.viewArrays[component];
+    TablePickerViewModel *viewModel = self.viewModels[component];
+    [viewModel removeModel];
     [tableView reloadData];
 }
 

@@ -9,6 +9,11 @@
 #import "ViewController.h"
 #import "TablePickerView.h"
 
+#define ISIphoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define NAV_HEIGHT  (ISIphoneX ? 88:64)
+
+
 @interface ViewController ()<TablePickerViewDataSource,TablePickerViewDelegate>
 
 @property (nonatomic, strong) TablePickerView *tablePickerView;
@@ -29,7 +34,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
+    if (@available(iOS 11.0, *)) {
+    }else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     [self.view addSubview:self.tablePickerView];
     
     [self loadData];
@@ -48,7 +56,8 @@
 #pragma mark 懒加载 
 - (TablePickerView *)tablePickerView {
     if (!_tablePickerView) {
-        _tablePickerView = [[TablePickerView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height) delegate:self];
+        _tablePickerView = [[TablePickerView alloc] initWithFrame:CGRectMake(0, NAV_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - NAV_HEIGHT) delegate:self];
+        _tablePickerView.selectColor = [@[[UIColor lightGrayColor],[UIColor yellowColor],[UIColor purpleColor]] mutableCopy];
     }
     return _tablePickerView;
 }
