@@ -24,7 +24,7 @@
 
 @property (nonatomic, weak) id<TablePickerViewDelegate>delegate;
 
-@property (nonatomic, weak) TablePickerView *optionView;
+@property (nonatomic, weak) TablePickerView *tablePickerView;
 
 @property (nonatomic, strong) UIColor *titleColor;
 

@@ -32,14 +32,14 @@
 
 
 - (void)setupSubViews {
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfComponentsInOptionView:)]) {
-        self.component = [self.dataSource numberOfComponentsInOptionView:self];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfComponentsInTablePickerView:)]) {
+        self.component = [self.dataSource numberOfComponentsInTablePickerView:self];
     }else {
         self.component = 0;
     }
     CGFloat currentX = 0;
     for (NSInteger component = 0; component < self.component; component ++) {
-        CGFloat c_width = [self.delegate optionView:self widthForComponent:component];
+        CGFloat c_width = [self.delegate tablePickerView:self widthForComponent:component];
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(currentX, 0, c_width, self.frame.size.height) style:UITableViewStylePlain];
         tableView.separatorStyle = self.cellSeparatorStyle;
         [tableView registerClass:[TablePickerViewCell class] forCellReuseIdentifier:@"TablePickerViewCell"];
@@ -47,6 +47,7 @@
         model.component = component;
         model.dataSource = self.dataSource;
         model.delegate = self.delegate;
+        model.tablePickerView = self;
         tableView.delegate = model;
         tableView.dataSource = model;
         
@@ -89,6 +90,29 @@
     TablePickerViewModel *viewModel = self.viewModels[component];
     [viewModel removeModel];
     [tableView reloadData];
+}
+
+- (void)scrollToTopComponent:(NSInteger)component {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UITableView *tableView = self.viewArrays[component];
+        [tableView setContentOffset:CGPointMake(0, 0)];
+    });
+}
+
+- (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forComponet:(NSInteger)component {
+    UITableView *tableView = self.viewArrays[component];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    return cell;
+}
+
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier forComponet:(NSInteger)component {
+    UITableView *tableView = self.viewArrays[component];
+    [tableView registerNib:nib forCellReuseIdentifier:identifier];
+}
+
+- (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier forComponet:(NSInteger)component {
+    UITableView *tableView = self.viewArrays[component];
+    [tableView registerClass:cellClass forCellReuseIdentifier:identifier];
 }
 
 - (void)setTitleFont:(UIFont *)titleFont {

@@ -14,10 +14,10 @@
 @protocol TablePickerViewDelegate <NSObject>
 
 @optional
-- (CGFloat) optionView:(TablePickerView *)optionView widthForComponent:(NSInteger)component;
+- (CGFloat) tablePickerView:(TablePickerView *)tablePickerView widthForComponent:(NSInteger)component;
 
-- (CGFloat) optionView:(TablePickerView *)optionView rowHeightForComponent:(NSInteger)component;
+- (CGFloat) tablePickerView:(TablePickerView *)tablePickerView rowHeightForComponent:(NSInteger)component;
 
-- (void) optionView:(TablePickerView *)optionView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
+- (void) tablePickerView:(TablePickerView *)tablePickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
 
 @end

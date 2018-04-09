@@ -47,4 +47,32 @@
  */
 - (void)reloadComponent:(NSInteger)component;
 
+/*!
+ @brief 滚动到顶部
+ @param component 列
+ */
+- (void) scrollToTopComponent:(NSInteger)component;
+
+/*!
+ @biref 获取复用cell
+ @param identifier 复用唯一标识
+ @param component 列
+ @return 返回tableViewCell
+ */
+- (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forComponet:(NSInteger)component;
+
+/*!
+ @brief 使用xib创建cell
+ @param identifier 复用唯一标识
+ @param component 列
+ */
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier forComponet:(NSInteger)component;
+
+/*!
+ @brief 使用纯代码创建cell
+ @param identifier 复用唯一标识
+ @param component 列
+ */
+- (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier forComponet:(NSInteger)component;
+
 @end

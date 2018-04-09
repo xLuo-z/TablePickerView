@@ -10,4 +10,5 @@
 
 @interface CustomContentCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *content;
 @end

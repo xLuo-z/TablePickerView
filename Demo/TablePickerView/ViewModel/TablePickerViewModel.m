@@ -34,16 +34,22 @@
 
 #pragma mark table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(optionView:numberOfRowsInComponent:)]) {
-        return [self.dataSource optionView:self.optionView numberOfRowsInComponent:self.component];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(tablePickerView:numberOfRowsInComponent:)]) {
+        return [self.dataSource tablePickerView:self.tablePickerView numberOfRowsInComponent:self.component];
     }
     return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(tablePickerView:viewForRow:forComponent:)]) {
+        UITableViewCell *cell = [self.dataSource tablePickerView:self.tablePickerView viewForRow:indexPath.row forComponent:self.component];
+        return cell;
+    }
+    
     TablePickerViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TablePickerViewCell"];
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(optionView:titleForRow:forComponent:)]) {
-         NSString *title = [self.dataSource optionView:self.optionView titleForRow:indexPath.row forComponent:self.component];
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(tablePickerView:titleForRow:forComponent:)]) {
+         NSString *title = [self.dataSource tablePickerView:self.tablePickerView titleForRow:indexPath.row forComponent:self.component];
         TablePickerModel *model = [[TablePickerModel alloc] init];
         model.title = title;
         cell.title = model.title;
@@ -54,7 +60,7 @@
             }
             index ++;
         }
-        if (self.modelArr.count < [self.dataSource optionView:self.optionView numberOfRowsInComponent:self.component]) {
+        if (self.modelArr.count < [self.dataSource tablePickerView:self.tablePickerView numberOfRowsInComponent:self.component]) {
             [self.modelArr addObject:model];
         }
         TablePickerModel *tempModel = self.modelArr[indexPath.row];
@@ -81,6 +87,12 @@
 
 #pragma mark table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([self getSelectKey] && [[self getSelectKey] isEqualToString:[NSString stringWithFormat:@"select_tag_%ld_%ld",self.component,indexPath.row]]) {
+        return;
+    }
+    [self saveSelectKey:self.component row:indexPath.row];
+    
     for (TablePickerModel *model in self.modelArr) {
         if (indexPath.row < self.modelArr.count) {
             TablePickerModel *tempModel = self.modelArr[indexPath.row];
@@ -93,8 +105,8 @@
     
     [tableView reloadData];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(optionView:didSelectRow:inComponent:)]) {
-            [self.delegate optionView:self.optionView didSelectRow:indexPath.row inComponent:self.component];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(tablePickerView:didSelectRow:inComponent:)]) {
+            [self.delegate tablePickerView:self.tablePickerView didSelectRow:indexPath.row inComponent:self.component];
         }
     });
     
@@ -103,10 +115,22 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(optionView:rowHeightForComponent:)]) {
-        return [self.delegate optionView:self.optionView rowHeightForComponent:self.component];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tablePickerView:rowHeightForComponent:)]) {
+        return [self.delegate tablePickerView:self.tablePickerView rowHeightForComponent:self.component];
     }
     return 49;
+}
+
+- (void) saveSelectKey:(NSInteger)component row:(NSInteger)row{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:[NSString stringWithFormat:@"select_tag_%ld_%ld",component,row] forKey:@"selectkey"];
+    [defaults synchronize];
+}
+
+- (NSString *)getSelectKey{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *key = [defaults valueForKey:@"selectkey"];
+    return key;
 }
 
 
