@@ -184,12 +184,12 @@
 - (UITableViewCell *)tablePickerView:(TablePickerView *)tablePickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component {
     NSArray *iddentifiers = @[@"CustomTitleCell",@"CustomContentCell"];
     if (component == 0) {
-        CustomTitleCell *cell = (CustomTitleCell *)[tablePickerView dequeueReusableCellWithIdentifier:iddentifiers[component] forComponet:component];
+        CustomTitleCell *cell = [tablePickerView dequeueReusableCellWithIdentifier:iddentifiers[component] forComponet:component];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.title.text = self.titles[row][@"name"];
         return cell;
     }
-    CustomContentCell *cell = (CustomContentCell *)[tablePickerView dequeueReusableCellWithIdentifier:iddentifiers[component] forComponet:component];
+    CustomContentCell *cell = [tablePickerView dequeueReusableCellWithIdentifier:iddentifiers[component] forComponet:component];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.content.text = self.contents[row][@"content"];
     return cell;

@@ -59,7 +59,7 @@
  @param component 列
  @return 返回tableViewCell
  */
-- (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forComponet:(NSInteger)component;
+- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forComponet:(NSInteger)component;
 
 /*!
  @brief 使用xib创建cell

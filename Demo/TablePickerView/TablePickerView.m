@@ -99,7 +99,7 @@
     });
 }
 
-- (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forComponet:(NSInteger)component {
+- (__kindof UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier forComponet:(NSInteger)component {
     UITableView *tableView = self.viewArrays[component];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     return cell;
